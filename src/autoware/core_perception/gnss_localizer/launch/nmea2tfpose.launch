@@ -1,0 +1,12 @@
+<!-- -->
+<launch>
+
+  <arg name="plane" default="7"/>
+  <arg name="gnss_outdoor_topic" default="/gnss_pose_outdoor"/>
+
+  <node pkg="gnss_localizer" type="nmea2tfpose" name="nmea2tfpose" output="log">
+    <param name="plane" value="$(arg plane)"/>
+    <param name="gnss_outdoor_topic" value="$(arg gnss_outdoor_topic)"/>
+  </node>
+
+</launch>

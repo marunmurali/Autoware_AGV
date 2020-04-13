@@ -1,0 +1,27 @@
+<!-- -*- mode: XML -*- -->
+<!-- run velodyne_pointcloud/CloudNodelet in a nodelet manager for an VLP-16
+
+arg: calibration = path to calibration file (default: standard VLP16db.yaml)
+pcap = path to packet capture file (default: use real device)
+
+$Id$
+-->
+
+<launch>
+  <!-- declare arguments with default values -->
+  <arg name="device1_ip" default="192.168.1.201" />
+  <arg name="port1" default="2368" />
+  <arg name="device2_ip" default="192.168.1.202" />
+  <arg name="port2" default="2369" />
+
+  <!-- start 1st velodyne -->
+  <include file="$(find runtime_manager)/launch_files/velodyne_vlp16_suz1.launch">
+    <arg name="device_ip" value="$(arg device1_ip)"/>
+    <arg name="port" value="$(arg port1)"/>
+  </include>
+
+  <!-- start 2nd velodyne -->
+  <include file="$(find runtime_manager)/launch_files/velodyne_vlp16_suz2.launch">
+    <arg name="device_ip" value="$(arg device2_ip)"/>
+    <arg name="port" value="$(arg port2)"/>
+  </include></launch>

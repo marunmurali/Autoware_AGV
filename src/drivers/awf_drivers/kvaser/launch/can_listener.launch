@@ -1,0 +1,6 @@
+<launch>
+  <arg name = "channel" default = "0" />
+
+  <node pkg = "kvaser" type = "can_listener" name = "can_listener" args="$(arg channel)" output = "log" />
+</launch>
+

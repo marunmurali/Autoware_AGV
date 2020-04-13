@@ -1,0 +1,14 @@
+<launch>
+
+  <!--Exctract info from dwm1001 dev boards, filter them and publish them into topics-->
+
+  <arg name="serial_port_name" default="/dev/ttyACM1" />  
+  <arg name="serial_baud_rate" default="115200" />  
+
+  <node pkg="jude_arun_whill" type="dwm1001_main.py" name="dwm1001" output="screen">
+
+        <param name="serial_port_name"      value="$(arg serial_port_name)" /> <!-- Name of serial port -->
+        <param name="serial_baud_rate"      value="$(arg serial_baud_rate)" />  <!--Baudrate of serial port-->
+
+    </node>
+</launch>

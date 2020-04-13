@@ -1,0 +1,185 @@
+<?xml version="1.0"?>
+<launch>
+	<!-- パラメータ -->
+	<!--<arg name="map_path" default="/home/robot/maps/coop2/map.yaml"/>-->
+	<!--<arg name="map_path" default="$(find whill)/demo/1FNorth.yaml"/>
+	<arg name="map_path" default="$(find whill)/demo/1FNorth.yaml"/>
+	<arg name="show_trajectory" default="True" />
+	<arg name="use_trajectory_tracker" default="True" />
+
+-->
+	<!--<node pkg="rostopic" type="rostopic" name="rostopic" args="pub /initialpose geometry_msgs/PoseWithCovarianceStamped '{header: { stamp: now, frame_id: 'map'}, pose : { pose: {position: {x: -33.5877304077, y:  -1.20071601868, z: 0.0}, orientation: {x: 0.0, y: 0.0, z:0.59148405327, w: 0.806316696297}}}}'"/>-->
+
+	<!-- static tf
+	<include file="$(find whill)/launch/static_tf.launch" />
+-->
+	<!-- ロボットモデルのインクルード
+		<include file="$(find robot_model)/launch/display_model.launch"/>
+-->
+	<!-- whill driver -->
+	<node pkg="jude_arun_whill" type="whill_node_Model_C.py" name="whill" respawn="true" output="screen" />
+
+	<!-- velodyne 16
+	<include file="$(find velodyne_pointcloud)/launch/VLP16_points.launch" />
+-->
+
+
+	<!-- webcamera
+	<node pkg="uvc_camera" type="uvc_camera_node" name="uvc_camera_node" respawn="false">
+		<param name="device" value="/dev/video0"/>
+	</node>
+-->
+	<!-- map server
+	<node name="map_server" pkg="map_server" type="map_server" args="$(arg map_path)">
+		<param name="frame_id" value="/map"/>
+	</node>
+-->
+	<!-- amcl
+	<include file="$(find whill)/launch/amcl.launch" />
+-->
+	<!-- unit converter
+	<node name="unit_converter" pkg="unit_converter" type="amcl_tfToPoseStamped" respawn="false"/>
+-->
+
+	<!-- human tracker
+	<include file="$(find pf_tracking)/launch/suz_pf_tracking.launch" />
+-->
+
+	<!-- mpc
+	<node name="whill_mpc" pkg ="mpc" type="whill_mpc.py" respawn="false"/>　-->
+<!--
+	/trajectory_tracker/max_vel   (Float32)
+	/trajectory_tracker/max_ang_vel   (Float32) it is OK to ignore
+-->
+
+
+	<!-- select human
+	<node name="select_human" pkg ="mpc" type ="select_human.py" respawn="false"/>
+-->
+
+	<!-- save data
+	<node name="save_data" pkg = "mpc" type="save_data.py"/>
+	-->
+
+
+
+
+
+
+
+	<!-- 軌跡の表示 -->
+	<!-- trajectory_recorder
+  	<node name="trajectory_recorder" pkg="trajectory_tracker" type="trajectory_recorder" if="$(arg show_trajectory)"/>
+-->
+	<!-- trajectory server
+	<node pkg="trajectory_tracker" type="trajectory_server" name="path_server" if="$(arg use_trajectory_tracker)">
+		<remap from="~/path" to="/plan"/>
+		<param name="file" value="" type="string"/>
+	</node>
+-->
+	<!-- trajectory tracker
+	<node pkg="trajectory_tracker" type="trajectory_tracker" name="trajectory_tracker" output="screen" if="$(arg use_trajectory_tracker)">
+		<param name="path" value="/plan" type="string" />
+
+		<param name="path_step" value="1" type="int" />
+		<param name="cmd_vel" value="cmd_vel" type="string" />
+		<remap from="~/cmd_vel" to="/cmd_vel"/>
+		<param name="max_vel"    value="1.0"  />
+		<param name="max_steering" value="0.6"   />
+		<param name="max_acc"    value="0.3"   />
+		<param name="max_angacc" value="1.0"   />
+		<param name="rotate_ang" value="0.4"  />
+		<param name="max_angvel" value="0.6" type="double" />
+
+		<param name="curv_forward" value="0.9" type="double" />
+		<param name="look_forward" value="0.6" type="double" />
+		<param name="k_dist" value="2.5" type="double" />
+		<param name="k_ang" value="5.0" type="double" />
+		<param name="k_avel" value="4" type="double" />
+		<param name="dist_lim" value="0.3" type="double" />
+		<param name="distance_angle_factor" value="-2.5" type="double" />
+		<param name="goal_tolerance_dist" value="0.3" type="double" />
+		<param name="goal_tolerance_ang" value="0.15" type="double" />
+		<param name="allow_backward" value="false" type="bool" />
+		<param name="dist_stop" value="5.3" type="double" />
+	</node>
+-->
+  
+  <arg name="dev" default="/dev/input/js0"/>
+  <arg name="cmd_vel_out" default="joy_cmd_vel" />
+  <arg name="max_linear_vel" default="1.0"/>
+  <arg name="max_angular_vel" default="0.5"/>
+  <arg name="timeout_duration" default="-1" />
+  <arg name="teleoperation_node" default="joystick_teleop" />
+
+  <node respawn="true" pkg="joy" type="joy_node" name="nav" >
+    <param name="dev" type="string" value="$(arg dev)" />
+    <remap from="/joy" to="joystick_teleop/joy" />
+  </node>
+
+  <!-- JOYSTICK TELEOP -->
+  <node respawn="true" pkg="jude_arun_whill" type="joystick_teleop_node" name ="$(arg teleoperation_node)" >
+    <param name="activate_button_id" value="6" type="int" />
+    <param name="axis_linear_id" value="1" type="int" />
+    <param name="axis_angular_id" value="0" type="int" />
+    <param name="max_linear_vel" value="$(arg max_linear_vel)" type="double" />
+    <param name="max_angular_vel" value="$(arg max_angular_vel)" type="double" />
+    <param name="timeout_duration" value="$(arg timeout_duration)" type="double" />
+    <remap from="/joystick_teleop/cmd_vel" to="$(arg cmd_vel_out)" />
+  </node>
+
+
+<!--autoware twist converter -->
+
+	<node pkg="jude_arun_whill" type="autoware_twist_converter" name="autoware_twist_converter">
+	</node>
+
+	<!-- joy topic publisher
+  <node name="joy_node" pkg="joy" type="joy_node" >
+		<param name="dev" value="/dev/input/js0" type="string" />
+	</node>
+-->
+  <!-- from /joy to /cmd_vel
+  <node name="JoystickTeleopNode" pkg="joystick_teleop" type="joystick_teleop_node" >
+		<remap from="cmd_vel" to="cmd_vel_joy" />
+		<param name="activate_button_id" value="6" type="int" />
+-->
+    <!-- one stick mode
+    <param name="axis_linear_id" value="1" type="int" />
+    <param name="axis_angular_id" value="0" type="int" />
+-->
+
+    <!-- two stick mode
+    <param name="axis_linear_id" value="1" type="int" />
+    <param name="axis_angular_id" value="2" type="int" />
+-->
+		<!--
+    <param name="axis_button_vertical_id" value="10" type="int" />
+    <param name="max_linear_vel" value="1.0" type="double" />
+    <param name="max_angular_vel" value="1.0" type="double" />
+    <param name="timeout_duration" value="-1" type="double" />
+
+
+		<remap from="/JoystickTeleopNode/joy" to="joy" />
+-->
+		<!--
+		<remap from="/JoystickTeleopNode/cmd_vel" to="cmd_vel" />
+
+
+	</node>
+-->
+
+<!--multiplexer -->
+
+	<node pkg="jude_arun_whill" type="cmd_vel_multiplexer" name="cmd_vel_multiplexer">
+		<remap from="~/cmd_vel_priority_high" to="/joy_cmd_vel" />
+		<remap from="~/cmd_vel_priority_mid" to="/obstacle_twist" />
+		<remap from="~/cmd_vel_priority_low" to="/autoware_twist" />
+		<remap from="~/cmd_vel_out" to="/cmd_vel" />
+		<param name="hold_sec" value="0.5" />
+	</node>
+
+	<!-- rviz
+ 	 <node pkg="rviz" type="rviz" name="rviz" args="-d /home/robot/catkin_ws/src/mpc/config/coop.rviz" />
+-->
+</launch>

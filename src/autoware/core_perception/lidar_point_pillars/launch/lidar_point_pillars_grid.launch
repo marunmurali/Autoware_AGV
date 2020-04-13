@@ -1,0 +1,213 @@
+<launch>
+
+  <arg name = "grid_1" default = "true"/>
+  <arg name = "grid_2" default = "true"/>
+  <arg name = "grid_3" default = "true"/>
+  <arg name = "grid_4" default = "true"/>
+  <arg name = "grid_5" default = "true"/>
+  <arg name = "grid_6" default = "true"/>
+  <arg name = "grid_7" default = "true"/>
+  <arg name = "grid_8" default = "true"/>
+
+
+  <!-- Grid 1 -->
+  <group if = "$(arg grid_1)">
+      <arg name="input_topic_1" default="/grid_1_points" />
+      <arg name="output_topic_1" default="/detection/lidar_detector/grid_1" />
+      <arg name="baselink_support_1" default="true" />
+      <arg name="reproduce_result_mode_1" default="true" />
+      <arg name="score_threshold_1" default="0.5" />
+      <arg name="nms_overlap_threshold_1" default="0.5" />
+      <arg name="pfe_onnx_file_1"/>
+      <arg name="rpn_onnx_file_1"/>
+      <node pkg="lidar_point_pillars" type="lidar_point_pillars" name="lidar_point_pillars" output="screen" ns = "points_pillars_grid_1">
+        <remap from="/points_raw" to="$(arg input_topic_1)"/>
+        <remap from="/detection/lidar_detector/objects" to="$(arg output_topic_1)"/>
+        <param name="baselink_support"            value="$(arg baselink_support_1)" />
+        <param name="reproduce_result_mode"        value="$(arg reproduce_result_mode_1)" />
+        <param name="score_threshold"   value="$(arg score_threshold_1)" />
+        <param name="nms_overlap_threshold"         value="$(arg nms_overlap_threshold_1)" />
+        <param name="pfe_onnx_file"   value="$(arg pfe_onnx_file_1)" />
+        <param name="rpn_onnx_file"   value="$(arg rpn_onnx_file_1)" />
+      </node>
+   
+      <node pkg="detected_objects_visualizer" type="visualize_detected_objects" name="point_pillars_visualization_01" output="screen" ns="/detection/lidar_detector_grid_1" />
+  </group>
+
+  <!-- Grid 2 -->
+  <group if = "$(arg grid_2)">
+      <arg name="input_topic_2" default="/grid_2_points" />
+      <arg name="output_topic_2" default="/detection/lidar_detector/grid_2" />
+      <arg name="baselink_support_2" default="true" />
+      <arg name="reproduce_result_mode_2" default="true" />
+      <arg name="score_threshold_2" default="0.5" />
+      <arg name="nms_overlap_threshold_2" default="0.5" />
+      <arg name="pfe_onnx_file_2"/>
+      <arg name="rpn_onnx_file_2"/>
+      <node pkg="lidar_point_pillars" type="lidar_point_pillars" name="lidar_point_pillars" output="screen" ns = "points_pillars_grid_2">
+        <remap from="/points_raw" to="$(arg input_topic_2)"/>
+        <remap from="/detection/lidar_detector/objects" to="$(arg output_topic_2)"/>
+
+        <param name="baselink_support"            value="$(arg baselink_support_2)" />
+        <param name="reproduce_result_mode"        value="$(arg reproduce_result_mode_2)" />
+        <param name="score_threshold"   value="$(arg score_threshold_2)" />
+        <param name="nms_overlap_threshold"         value="$(arg nms_overlap_threshold_2)" />
+        <param name="pfe_onnx_file"   value="$(arg pfe_onnx_file_2)" />
+        <param name="rpn_onnx_file"   value="$(arg rpn_onnx_file_2)" />
+      </node>
+   
+      <node pkg="detected_objects_visualizer" type="visualize_detected_objects" name="point_pillars_visualization_01" output="screen" ns="/detection/lidar_detector_grid_2" />
+  </group>
+
+  <!-- Grid 3 -->
+  <group if = "$(arg grid_3)">
+      <arg name="input_topic_3" default="/grid_3_points" />
+      <arg name="output_topic_3" default="/detection/lidar_detector/grid_3" />
+      <arg name="baselink_support_3" default="true" />
+      <arg name="reproduce_result_mode_3" default="true" />
+      <arg name="score_threshold_3" default="0.5" />
+      <arg name="nms_overlap_threshold_3" default="0.5" />
+      <arg name="pfe_onnx_file_3"/>
+      <arg name="rpn_onnx_file_3"/>
+      <node pkg="lidar_point_pillars" type="lidar_point_pillars" name="lidar_point_pillars" output="screen" ns = "points_pillars_grid_3">
+        <remap from="/points_raw" to="$(arg input_topic_3)"/>
+        <remap from="/detection/lidar_detector/objects" to="$(arg output_topic_3)"/>
+
+        <param name="baselink_support"            value="$(arg baselink_support_3)" />
+        <param name="reproduce_result_mode"        value="$(arg reproduce_result_mode_3)" />
+        <param name="score_threshold"   value="$(arg score_threshold_3)" />
+        <param name="nms_overlap_threshold"         value="$(arg nms_overlap_threshold_3)" />
+        <param name="pfe_onnx_file"   value="$(arg pfe_onnx_file_3)" />
+        <param name="rpn_onnx_file"   value="$(arg rpn_onnx_file_3)" />
+      </node>
+   
+      <node pkg="detected_objects_visualizer" type="visualize_detected_objects" name="point_pillars_visualization_01" output="screen" ns="/detection/lidar_detector_grid_3" />
+  </group>
+
+  <!-- Grid 4 -->
+  <group if = "$(arg grid_4)">
+      <arg name="input_topic_4" default="/grid_4_points" />
+      <arg name="output_topic_4" default="/detection/lidar_detector/grid_4" />
+      <arg name="baselink_support_4" default="true" />
+      <arg name="reproduce_result_mode_4" default="true" />
+      <arg name="score_threshold_4" default="0.5" />
+      <arg name="nms_overlap_threshold_4" default="0.5" />
+      <arg name="pfe_onnx_file_4"/>
+      <arg name="rpn_onnx_file_4"/>
+      <node pkg="lidar_point_pillars" type="lidar_point_pillars" name="lidar_point_pillars" output="screen" ns = "points_pillars_grid_4">
+        <remap from="/points_raw" to="$(arg input_topic_4)"/>
+        <remap from="/detection/lidar_detector/objects" to="$(arg output_topic_4)"/>
+
+        <param name="baselink_support"            value="$(arg baselink_support_4)" />
+        <param name="reproduce_result_mode"        value="$(arg reproduce_result_mode_4)" />
+        <param name="score_threshold"   value="$(arg score_threshold_4)" />
+        <param name="nms_overlap_threshold"         value="$(arg nms_overlap_threshold_4)" />
+        <param name="pfe_onnx_file"   value="$(arg pfe_onnx_file_4)" />
+        <param name="rpn_onnx_file"   value="$(arg rpn_onnx_file_4)" />
+      </node>
+   
+      <node pkg="detected_objects_visualizer" type="visualize_detected_objects" name="point_pillars_visualization_01" output="screen" ns="/detection/lidar_detector_grid_4" />
+  </group>
+
+  <!-- Grid 5 -->
+  <group if = "$(arg grid_5)">
+      <arg name="input_topic_5" default="/grid_5_points" />
+      <arg name="output_topic_5" default="/detection/lidar_detector/grid_5" />
+      <arg name="baselink_support_5" default="true" />
+      <arg name="reproduce_result_mode_5" default="true" />
+      <arg name="score_threshold_5" default="0.5" />
+      <arg name="nms_overlap_threshold_5" default="0.5" />
+      <arg name="pfe_onnx_file_5"/>
+      <arg name="rpn_onnx_file_5"/>
+      <node pkg="lidar_point_pillars" type="lidar_point_pillars" name="lidar_point_pillars" output="screen" ns = "points_pillars_grid_5">
+        <remap from="/points_raw" to="$(arg input_topic_5)"/>
+        <remap from="/detection/lidar_detector/objects" to="$(arg output_topic_5)"/>
+
+        <param name="baselink_support"            value="$(arg baselink_support_5)" />
+        <param name="reproduce_result_mode"        value="$(arg reproduce_result_mode_5)" />
+        <param name="score_threshold"   value="$(arg score_threshold_5)" />
+        <param name="nms_overlap_threshold"         value="$(arg nms_overlap_threshold_5)" />
+        <param name="pfe_onnx_file"   value="$(arg pfe_onnx_file_5)" />
+        <param name="rpn_onnx_file"   value="$(arg rpn_onnx_file_5)" />
+      </node>
+   
+      <node pkg="detected_objects_visualizer" type="visualize_detected_objects" name="point_pillars_visualization_01" output="screen" ns="/detection/lidar_detector_grid_5" />
+  </group>
+
+  <!-- Grid 6 -->
+  <group if = "$(arg grid_6)">
+      <arg name="input_topic_6" default="/grid_6_points" />
+      <arg name="output_topic_6" default="/detection/lidar_detector/grid_6" />
+      <arg name="baselink_support_6" default="true" />
+      <arg name="reproduce_result_mode_6" default="true" />
+      <arg name="score_threshold_6" default="0.5" />
+      <arg name="nms_overlap_threshold_6" default="0.5" />
+      <arg name="pfe_onnx_file_6"/>
+      <arg name="rpn_onnx_file_6"/>
+      <node pkg="lidar_point_pillars" type="lidar_point_pillars" name="lidar_point_pillars" output="screen" ns = "points_pillars_grid_6">
+        <remap from="/points_raw" to="$(arg input_topic_6)"/>
+        <remap from="/detection/lidar_detector/objects" to="$(arg output_topic_6)"/>
+
+        <param name="baselink_support"            value="$(arg baselink_support_6)" />
+        <param name="reproduce_result_mode"        value="$(arg reproduce_result_mode_6)" />
+        <param name="score_threshold"   value="$(arg score_threshold_6)" />
+        <param name="nms_overlap_threshold"         value="$(arg nms_overlap_threshold_6)" />
+        <param name="pfe_onnx_file"   value="$(arg pfe_onnx_file_6)" />
+        <param name="rpn_onnx_file"   value="$(arg rpn_onnx_file_6)" />
+      </node>
+   
+      <node pkg="detected_objects_visualizer" type="visualize_detected_objects" name="point_pillars_visualization_01" output="screen" ns="/detection/lidar_detector_grid_6" />
+  </group>
+
+  <!-- Grid 7 -->
+  <group if = "$(arg grid_7)">
+      <arg name="input_topic_7" default="/grid_7_points" />
+      <arg name="output_topic_7" default="/detection/lidar_detector/grid_7" />
+      <arg name="baselink_support_7" default="true" />
+      <arg name="reproduce_result_mode_7" default="true" />
+      <arg name="score_threshold_7" default="0.5" />
+      <arg name="nms_overlap_threshold_7" default="0.5" />
+      <arg name="pfe_onnx_file_7"/>
+      <arg name="rpn_onnx_file_7"/>
+      <node pkg="lidar_point_pillars" type="lidar_point_pillars" name="lidar_point_pillars" output="screen" ns = "points_pillars_grid_7">
+        <remap from="/points_raw" to="$(arg input_topic_7)"/>
+        <remap from="/detection/lidar_detector/objects" to="$(arg output_topic_7)"/>
+
+        <param name="baselink_support"            value="$(arg baselink_support_7)" />
+        <param name="reproduce_result_mode"        value="$(arg reproduce_result_mode_7)" />
+        <param name="score_threshold"   value="$(arg score_threshold_7)" />
+        <param name="nms_overlap_threshold"         value="$(arg nms_overlap_threshold_7)" />
+        <param name="pfe_onnx_file"   value="$(arg pfe_onnx_file_7)" />
+        <param name="rpn_onnx_file"   value="$(arg rpn_onnx_file_7)" />
+      </node>
+   
+      <node pkg="detected_objects_visualizer" type="visualize_detected_objects" name="point_pillars_visualization_01" output="screen" ns="/detection/lidar_detector_grid_7" />
+  </group>
+
+  <!-- Grid 8 -->
+  <group if = "$(arg grid_8)">
+      <arg name="input_topic_8" default="/grid_8_points" />
+      <arg name="output_topic_8" default="/detection/lidar_detector/grid_8" />
+      <arg name="baselink_support_8" default="true" />
+      <arg name="reproduce_result_mode_8" default="true" />
+      <arg name="score_threshold_8" default="0.5" />
+      <arg name="nms_overlap_threshold_8" default="0.5" />
+      <arg name="pfe_onnx_file_8"/>
+      <arg name="rpn_onnx_file_8"/>
+      <node pkg="lidar_point_pillars" type="lidar_point_pillars" name="lidar_point_pillars" output="screen" ns = "points_pillars_grid_8">
+        <remap from="/points_raw" to="$(arg input_topic_8)"/>
+        <remap from="/detection/lidar_detector/objects" to="$(arg output_topic_8)"/>
+
+        <param name="baselink_support"            value="$(arg baselink_support_8)" />
+        <param name="reproduce_result_mode"        value="$(arg reproduce_result_mode_8)" />
+        <param name="score_threshold"   value="$(arg score_threshold_8)" />
+        <param name="nms_overlap_threshold"         value="$(arg nms_overlap_threshold_8)" />
+        <param name="pfe_onnx_file"   value="$(arg pfe_onnx_file_8)" />
+        <param name="rpn_onnx_file"   value="$(arg rpn_onnx_file_8)" />
+      </node>
+   
+      <node pkg="detected_objects_visualizer" type="visualize_detected_objects" name="point_pillars_visualization_01" output="screen" ns="/detection/lidar_detector_grid_8" />
+  </group>
+
+
+</launch>

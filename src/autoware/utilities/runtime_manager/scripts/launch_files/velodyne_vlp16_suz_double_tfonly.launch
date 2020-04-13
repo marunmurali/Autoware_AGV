@@ -1,0 +1,24 @@
+<!-- -*- mode: XML -*- -->
+<!-- run velodyne_pointcloud/CloudNodelet in a nodelet manager for an VLP-16
+
+arg: calibration = path to calibration file (default: standard VLP16db.yaml)
+pcap = path to packet capture file (default: use real device)
+
+$Id$
+-->
+
+<!-- Measured on July 8th, 2019 -->
+<launch>
+  <!-- declare arguments with default values -->
+  <arg name="frame_id1" default="velodyne_1" /> <!-- modified from lidar1 -->
+  <arg name="frame_id2" default="velodyne_2" />
+
+  <!-- start tf -->
+  <node pkg="tf" type="static_transform_publisher" name="base_link_to_$(arg frame_id1)" args="1.2 0 1.780 0 0 0 base_link $(arg frame_id1) 10"/>  
+  <node pkg="tf" type="static_transform_publisher" name="base_link_to_$(arg frame_id2)" args="1.2 0 1.580  0 0 0 base_link $(arg frame_id2) 10"/>
+</launch>
+
+
+<!-- rosrun tf static_transform_publisher 1.2 0 1.826 0 0 0 base_link ego_car/lidar/lidar2 10 -->
+
+

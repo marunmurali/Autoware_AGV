@@ -1,0 +1,49 @@
+<!-- -*- mode: XML -*- -->
+<!-- run velodyne_pointcloud/CloudNodelet in a nodelet manager for an VLP-16
+
+arg: calibration = path to calibration file (default: standard VLP16db.yaml)
+pcap = path to packet capture file (default: use real device)
+
+$Id$
+-->
+
+<launch>
+  <!-- declare arguments with default values -->
+  <arg name="pcap" default="" />
+  <arg name="calibration" default="$(find velodyne_pointcloud)/params/VLP16db.yaml"/>
+  <arg name="min_range" default="0.4" />
+  <arg name="max_range" default="130.0" />
+  <arg name="model" default="VLP16"/>
+  <arg name="velodyne_points_topic" default="points_raw2"/>
+  <arg name="velodyne_packets_topic" default="velodyne_packets2"/>
+  <arg name="device_ip" default="192.168.1.202" />
+  <arg name="port" default="2369" />
+  <arg name="frame_id" default="velodyne_2" />
+  <arg name="manager" default="$(arg frame_id)_nodelet_manager" />
+
+  <!-- start nodelet manager and driver nodelets -->
+  <include file="$(find velodyne_driver)/launch/nodelet_manager.launch">
+    <arg name="model" value="$(arg model)"/>
+    <arg name="pcap" value="$(arg pcap)"/>
+    <arg name="device_ip" value="$(arg device_ip)" />
+    <arg name="frame_id" value="$(arg frame_id)" />
+    <arg name="port" value="$(arg port)" />
+    <arg name="manager" value="$(arg manager)" />
+    <arg name="velodyne_packets_topic" value="$(arg velodyne_packets_topic)" />
+  </include>
+
+  <!-- start cloud nodelet -->
+  <!--<node pkg="nodelet" type="nodelet" name="cloud_nodelet"
+        args="load velodyne_pointcloud/CloudNodelet velodyne_nodelet_manager">-->
+  <include file="$(find velodyne_pointcloud)/launch/cloud_nodelet.launch" >
+    <arg name="calibration" value="$(arg calibration)"/>
+    <arg name="min_range" value="$(arg min_range)"/>
+    <arg name="max_range" value="$(arg max_range)"/>
+    <arg name="manager" value="$(arg manager)" />
+    <arg name="velodyne_points_topic" value="$(arg velodyne_points_topic)" />
+    <arg name="velodyne_packets_topic" value="$(arg velodyne_packets_topic)" />
+  </include>
+
+  <!-- start tf -->
+  <node pkg="tf" type="static_transform_publisher" name="base_link_to_$(arg frame_id)" args="1.2 0 1.580  0 0 0 base_link $(arg frame_id) 10"/>
+</launch>

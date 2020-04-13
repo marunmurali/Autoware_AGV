@@ -1,0 +1,8 @@
+<launch>
+  <arg name="ndt_score_limit" default="500" />  
+
+  <node pkg="jude_arun_whill" type="combine_gps" name="combine_gps">
+    <param name="ndt_score_limit" value="$(arg ndt_score_limit)" />
+  </node>
+<!--dwm launch-->
+</launch>

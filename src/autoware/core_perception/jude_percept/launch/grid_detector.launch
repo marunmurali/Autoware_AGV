@@ -1,0 +1,164 @@
+<launch>
+
+  <arg name = "grid_1" default = "true"/>
+  <arg name = "grid_2" default = "true"/>
+  <arg name = "grid_3" default = "true"/>
+  <arg name = "grid_4" default = "true"/>
+  <arg name = "grid_5" default = "true"/>
+  <arg name = "grid_6" default = "true"/>
+  <arg name = "grid_7" default = "true"/>
+  <arg name = "grid_8" default = "true"/>
+
+  <!-- Grid 1 -->
+  <group if = "$(arg grid_1)">
+      <arg name="input_topic_1"  default="/detection/lidar_detector/objects" />
+      <arg name="output_topic_1" default="/detection/lidar_detector/objects/grid_1" />
+      <arg name="x_min_1" default="2.6" />
+      <arg name="x_max_1" default="30.0" />
+      <arg name="y_min_1" default="1.1" />
+      <arg name="y_max_1" default="4.5" />
+      
+        <node pkg="jude_percept" name="grid_detector" type="grid_detector" ns="grid_one">
+          <param name="input_topic" value="$(arg input_topic_1)" />
+          <param name="output_topic" value="$(arg output_topic_1)" />
+          <param name="x_min" value="$(arg x_min_1)" />
+          <param name="x_max" value="$(arg x_max_1)" />
+          <param name="y_min" value="$(arg y_min_1)" />
+          <param name="y_max" value="$(arg y_max_1)" />
+        </node>
+  </group>
+
+  <!-- Grid 2 -->
+  <group if = "$(arg grid_2)">
+      <arg name="input_topic_2"  default="/detection/lidar_detector/objects" />
+      <arg name="output_topic_2" default="/detection/lidar_detector/objects/grid_2" />
+      <arg name="x_min_2" default="2.6" />
+      <arg name="x_max_2" default="30.0" />
+      <arg name="y_min_2" default="-1.0" />
+      <arg name="y_max_2" default="1.0" />
+      
+        <node pkg="jude_percept" name="grid_detector" type="grid_detector" ns="grid_two">
+          <param name="input_topic" value="$(arg input_topic_2)" />
+          <param name="output_topic" value="$(arg output_topic_2)" />
+          <param name="x_min" value="$(arg x_min_2)" />
+          <param name="x_max" value="$(arg x_max_2)" />
+          <param name="y_min" value="$(arg y_min_2)" />
+          <param name="y_max" value="$(arg y_max_2)" />
+        </node>
+  </group>
+
+  <!-- Grid 3 -->
+  <group if = "$(arg grid_3)">
+      <arg name="input_topic_3"  default="/detection/lidar_detector/objects" />
+      <arg name="output_topic_3" default="/detection/lidar_detector/objects/grid_3" />
+      <arg name="x_min_3" default="2.6" />
+      <arg name="x_max_3" default="30.0" />
+      <arg name="y_min_3" default="-4.5" />
+      <arg name="y_max_3" default="-1.1" />
+      
+        <node pkg="jude_percept" name="grid_detector" type="grid_detector" ns="grid_three">
+          <param name="input_topic" value="$(arg input_topic_3)" />
+          <param name="output_topic" value="$(arg output_topic_3)" />
+          <param name="x_min" value="$(arg x_min_3)" />
+          <param name="x_max" value="$(arg x_max_3)" />
+          <param name="y_min" value="$(arg y_min_3)" />
+          <param name="y_max" value="$(arg y_max_3)" />
+        </node>
+  </group>
+
+  <!-- Grid 4 -->
+  <group if = "$(arg grid_4)">
+      <arg name="input_topic_4"  default="/detection/lidar_detector/objects" />
+      <arg name="output_topic_4" default="/detection/lidar_detector/objects/grid_4" />
+      <arg name="x_min_4" default="-2.0" />
+      <arg name="x_max_4" default="2.5" />
+      <arg name="y_min_4" default="-4.5" />
+      <arg name="y_max_4" default="-1.1" />
+      
+        <node pkg="jude_percept" name="grid_detector" type="grid_detector" ns="grid_four">
+          <param name="input_topic" value="$(arg input_topic_4)" />
+          <param name="output_topic" value="$(arg output_topic_4)" />
+          <param name="x_min" value="$(arg x_min_4)" />
+          <param name="x_max" value="$(arg x_max_4)" />
+          <param name="y_min" value="$(arg y_min_4)" />
+          <param name="y_max" value="$(arg y_max_4)" />
+        </node>
+  </group>
+
+  <!-- Grid 5 -->
+  <group if = "$(arg grid_5)">
+      <arg name="input_topic_5"  default="/detection/lidar_detector/objects" />
+      <arg name="output_topic_5" default="/detection/lidar_detector/objects/grid_5" />
+      <arg name="x_min_5" default="-30.0" />
+      <arg name="x_max_5" default="-2.1" />
+      <arg name="y_min_5" default="-4.5" />
+      <arg name="y_max_5" default="-1.1" />
+      
+        <node pkg="jude_percept" name="grid_detector" type="grid_detector" ns="grid_five">
+          <param name="input_topic" value="$(arg input_topic_5)" />
+          <param name="output_topic" value="$(arg output_topic_5)" />
+          <param name="x_min" value="$(arg x_min_5)" />
+          <param name="x_max" value="$(arg x_max_5)" />
+          <param name="y_min" value="$(arg y_min_5)" />
+          <param name="y_max" value="$(arg y_max_5)" />
+        </node>
+  </group>
+
+  <!-- Grid 6 -->
+  <group if = "$(arg grid_6)">
+      <arg name="input_topic_6"  default="/detection/lidar_detector/objects" />
+      <arg name="output_topic_6" default="/detection/lidar_detector/objects/grid_6" />
+      <arg name="x_min_6" default="-30.0" />
+      <arg name="x_max_6" default="-2.1" />
+      <arg name="y_min_6" default="-1.0" />
+      <arg name="y_max_6" default="1.0" />
+      
+        <node pkg="jude_percept" name="grid_detector" type="grid_detector" ns="grid_six">
+          <param name="input_topic" value="$(arg input_topic_6)" />
+          <param name="output_topic" value="$(arg output_topic_6)" />
+          <param name="x_min" value="$(arg x_min_6)" />
+          <param name="x_max" value="$(arg x_max_6)" />
+          <param name="y_min" value="$(arg y_min_6)" />
+          <param name="y_max" value="$(arg y_max_6)" />
+        </node>
+  </group>
+
+  <!-- Grid 7 -->
+  <group if = "$(arg grid_7)">
+      <arg name="input_topic_7"  default="/detection/lidar_detector/objects" />
+      <arg name="output_topic_7" default="/detection/lidar_detector/objects/grid_7" />
+      <arg name="x_min_7" default="-30.0" />
+      <arg name="x_max_7" default="-2.1" />
+      <arg name="y_min_7" default="1.1" />
+      <arg name="y_max_7" default="4.5" />
+      
+        <node pkg="jude_percept" name="grid_detector" type="grid_detector" ns="grid_seven">
+          <param name="input_topic" value="$(arg input_topic_7)" />
+          <param name="output_topic" value="$(arg output_topic_7)" />
+          <param name="x_min" value="$(arg x_min_7)" />
+          <param name="x_max" value="$(arg x_max_7)" />
+          <param name="y_min" value="$(arg y_min_7)" />
+          <param name="y_max" value="$(arg y_max_7)" />
+        </node>
+  </group>
+
+  <!-- Grid 8 -->
+  <group if = "$(arg grid_8)">
+      <arg name="input_topic_8"  default="/detection/lidar_detector/objects" />
+      <arg name="output_topic_8" default="/detection/lidar_detector/objects/grid_8" />
+      <arg name="x_min_8" default="-2.0" />
+      <arg name="x_max_8" default="2.5" />
+      <arg name="y_min_8" default="1.1" />
+      <arg name="y_max_8" default="4.5" />
+      
+        <node pkg="jude_percept" name="grid_detector" type="grid_detector" ns="grid_eight">
+          <param name="input_topic" value="$(arg input_topic_8)" />
+          <param name="output_topic" value="$(arg output_topic_8)" />
+          <param name="x_min" value="$(arg x_min_8)" />
+          <param name="x_max" value="$(arg x_max_8)" />
+          <param name="y_min" value="$(arg y_min_8)" />
+          <param name="y_max" value="$(arg y_max_8)" />
+        </node>
+  </group>
+
+</launch>

@@ -1,0 +1,9 @@
+<launch>
+  <arg name="obstacle_size" default="20" />
+  <arg name="points_topic" default="obstacle_points_filtered" />
+
+  <node pkg="jude_arun_whill" name="obstacle_stop" type="obstacle_stop">
+    <param name="obstacle_size" value="$(arg obstacle_size)" />
+    <param name="points_topic" value="$(arg points_topic)" />
+  </node>
+</launch>
