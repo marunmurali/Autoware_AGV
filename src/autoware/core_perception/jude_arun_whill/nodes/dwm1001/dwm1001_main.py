@@ -11,7 +11,7 @@ __email__      = SYS_DEFS.EMAIL
 __status__     = SYS_DEFS.STATUS
 
 
-import rospy, time, serial, os, numpy
+import rospy, time, serial, os, numpy, math
 from dwm1001_apiCommands            import DWM1001_API_COMMANDS
 from dynamic_reconfigure.server     import Server
 from jude_arun_whill.cfg          import DWM1001_Tune_SerialConfig
@@ -148,6 +148,7 @@ class dwm1001_localizer:
         """
 	lastposx=0.0
 	lastposy=0.0
+	boolforfirst=False
         # loop trough the array given by the serial port
         for network in networkDataArray:
 
@@ -190,19 +191,20 @@ class dwm1001_localizer:
                 tagpos.pose.position.x = float(networkDataArray[networkDataArray.index(network) + 1])
                 tagpos.pose.position.y = float(networkDataArray[networkDataArray.index(network) + 2])
                 tagpos.pose.position.z = float(networkDataArray[networkDataArray.index(network) + 3])
-
-                yaw_ = atan2(tagpos.pose.position.x - lastposx, tagpos.pose.position.y - lastposy)
-                # roll_ = 0
-                # pitch_ = 0
-                lastposx=tagpos.pose.position.x
-                lastposy=tagpos.pose.position.y
-                q = quaternion_from_euler(0.0, 0.0, yaw_) # yaw in radian
-                tagpos.pose.orientation = Quaternion(*q)
-                
-                pub_anchor2 = rospy.Publisher('/dwm1001/tagpos', PoseStamped, queue_size=10)
-		#rospy.sleep(1)
-                pub_anchor2.publish(tagpos)
-
+		distcovered=math.sqrt((tagpos.pose.position.x - lastposx)**2 + (tagpos.pose.position.y - lastposy)**2)
+		if distcovered > .1:
+                	yaw_ = atan2(tagpos.pose.position.x - lastposx, tagpos.pose.position.y - lastposy)
+                	# roll_ = 0
+                	# pitch_ = 0
+                	lastposx=tagpos.pose.position.x
+                	lastposy=tagpos.pose.position.y
+                	q = quaternion_from_euler(0.0, 0.0, yaw_) # yaw in radian
+                	tagpos.pose.orientation = Quaternion(*q)
+                	if boolforfirst
+                		pub_anchor2 = rospy.Publisher('/dwm1001/tagpos', PoseStamped, queue_size=10)
+				#rospy.sleep(1)
+                		pub_anchor2.publish(tagpos)
+			boolforfirst=True
                 rospy.loginfo("tagpos: "
                               + " position x: "
                               + str(tagpos.pose.position.x)
