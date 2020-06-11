@@ -20,9 +20,8 @@ using namespace std;
 
   //Initialize messages
   geometry_msgs::PoseStamped pose_in,pose_out,pose_ndt,pose_ndt_mod,poseout;
-  nav_msgs::Odometry Odom_in;
+  nav_msgs::Odometry odom_in,odom_last;
   sensor_msgs::Imu Imu_raw;
-  geometry_msgs::Quaternion quat_delta,odom_quat;
 
   // handle
   //ros::NodeHandle nh_;
@@ -39,7 +38,8 @@ using namespace std;
   ros::Subscriber sub7_;
   // Initialize variables
   float ndt_score,gnss_precision;
-  ros::Time score_time,precision_time,ndt_time,last_ndt_time;
+  ros::Time score_time,precision_time,ndt_time,last_ndt_time(0);
+  tf2::Quaternion quat_in,quat_last,quat_ndt,quat_delta,odom_quat;
 
 void callbackFromGnssOut(const geometry_msgs::PoseStamped::ConstPtr &received_pose)
 {
@@ -70,12 +70,12 @@ precision_time=received_pose3->header.stamp;//please make sure this line does no
 }
 void callbackFromOdom(const nav_msgs::Odometry::ConstPtr &received_Odom)
 {
-Odom_last=Odom_in;
-Odom_in=*received_Odom;
+odom_last=odom_in;
+odom_in=*received_Odom;
 }
-void callbackFromImu(const sensor_msgs::Imu::ConstPtr &received_Imu);
+void callbackFromImu(const sensor_msgs::Imu::ConstPtr &received_Imu)
 {
-Imu_raw=*.received_Imu;
+Imu_raw=*received_Imu;
 }
 
 int main(int argc, char** argv)
@@ -121,18 +121,23 @@ ros::NodeHandle nh_;
   else
   {
   //extend pos ndt based on odom
-  if((last_ndt_time.toSec()-ndt_time.toSec())>2&&ndt_score > ndt_score_limit)
+  if((ndt_time.toSec()-last_ndt_time.toSec())>2&&ndt_score > ndt_score_limit)
   {
-  pos_ndt_mod.pose.position.x=pos_ndt.pose.position.x;
-  pos_ndt_mod.pose.position.y=pos_ndt.pose.position.x;
-  pos_ndt_mod.pose.position.orientation=pos_ndt.pose.position.orientation;
+  pose_ndt_mod.pose.position.x=pose_ndt.pose.position.x;
+  pose_ndt_mod.pose.position.y=pose_ndt.pose.position.x;
+  pose_ndt_mod.pose.orientation=pose_ndt.pose.orientation;
   last_ndt_time=ndt_time;
   }
-  pos_ndt_mod.pose.position.x = pos_ndt.pose.position.x+(odom_last.pose.pose.position.x-odom_in.pose.pose.position.x);
-  pos_ndt_mod.pose.position.y = pos_ndt.pose.position.y+(odom_last.pose.pose.position.y-odom_in.pose.pose.position.y);
-  quat_delta = odom_in.pose.pose.orientation*odom_last.pose.pose.orientation_inverse;
-  odom_quat = quat_delta*pos_ndt_mod.pose.orientation;
-  pos_ndt_mod.pose.position.orientation = Quarternion(*odom_quat)
+  pose_ndt_mod.pose.position.x = pose_ndt.pose.position.x+(odom_last.pose.pose.position.x-odom_in.pose.pose.position.x);
+  pose_ndt_mod.pose.position.y = pose_ndt.pose.position.y+(odom_last.pose.pose.position.y-odom_in.pose.pose.position.y);
+  tf2::convert(odom_in.pose.pose.orientation,quat_in);
+  tf2::convert(odom_last.pose.pose.orientation,quat_last);
+  tf2::convert(pose_ndt_mod.pose.orientation,quat_ndt);
+  quat_last[3]=-quat_last[3];
+  quat_delta = quat_in*quat_last;
+  //quat_delta = quat_in*quat_last_inverse;
+  odom_quat = quat_delta*quat_ndt;
+  tf2::convert(odom_quat,pose_ndt_mod.pose.orientation);
   poseout=pose_ndt_mod;
   ROS_INFO("gnss received from ndt.");
   pub1_.publish(poseout);

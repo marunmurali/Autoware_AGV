@@ -1,0 +1,7 @@
+<launch>
+  <arg name="ndt_score_limit" default="0.8" />  
+
+  <node pkg="jude_arun_whill" type="pose_predictor" name="pose_predictor">
+    <param name="ndt_score_limit" value="$(arg ndt_score_limit)" />
+  </node>
+</launch>

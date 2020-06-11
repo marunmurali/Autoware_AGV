@@ -12,6 +12,8 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   autoware_msgs
   tf
+  tf2
+  tf2_geometry_msgs
   serial
   genmsg
   pcl_ros
@@ -55,7 +57,7 @@ generate_dynamic_reconfigure_options(
 catkin_package(
   INCLUDE_DIRS
   LIBRARIES whill
-  CATKIN_DEPENDS message_runtime roscpp std_msgs tf serial sensor_msgs geometry_msgs autoware_config_msgs autoware_msgs message_generation pcl_ros pcl_conversions dynamic_reconfigure
+  CATKIN_DEPENDS message_runtime roscpp std_msgs tf tf2 tf2_geometry_msgs serial sensor_msgs geometry_msgs autoware_config_msgs autoware_msgs message_generation pcl_ros pcl_conversions dynamic_reconfigure
 
 )
 
@@ -107,6 +109,11 @@ add_executable(combine_gps nodes/combine_gps/combine_gps.cpp)
 add_dependencies(combine_gps ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(combine_gps ${catkin_LIBRARIES})
 
+## Build pose predictor
+add_executable(pose_predictor nodes/pose_predictor/pose_predictor.cpp)
+add_dependencies(pose_predictor ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(pose_predictor ${catkin_LIBRARIES})
+
 ## Build dwm1001
 # add_executable(dwm1001 nodes/dwm1001/dwm1001_main.py)
 # add_dependencies(dwm1001 ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
@@ -120,6 +127,7 @@ install(TARGETS
             autoware_twist_converter
             obstacle_stop
 	    combine_gps
+	    pose_predictor
 	    # dwm1001
         ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
         LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}

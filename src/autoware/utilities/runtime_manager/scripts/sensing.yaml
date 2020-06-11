@@ -747,6 +747,10 @@ cmds:
       desc : combines indoor and outdoor gps
       cmd  : roslaunch jude_arun_whill combine_gps.launch node_name:=combine_gps
       param: combine_gps
+    - name : Pose Predictor
+      desc : Predict Pose from Odometry
+      cmd  : roslaunch jude_arun_whill pose_predictor.launch node_name:=pose_predictor
+      param: pose_predictor
     - name : dwm1001
       desc : Indoor GPS Driver
       cmd  : roslaunch jude_arun_whill dwm1001.launch node_name:=dwm1001
@@ -2697,6 +2701,16 @@ params :
       desc  : ndt_score_limit desc sample
       label : ndt score minimum limit to use ndt pose
       v     : 500.0
+      cmd_param :
+        dash        : ''
+        delim       : ':='
+
+  - name  : pose_predictor
+    vars :
+    - name  : ndt_score_limit
+      desc  : ndt_score_limit desc sample
+      label : ndt score minimum limit to use ndt pose
+      v     : 0.8
       cmd_param :
         dash        : ''
         delim       : ':='

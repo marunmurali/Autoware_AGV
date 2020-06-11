@@ -1,7 +1,0 @@
-<launch>
-  <arg name="lane_change_monitor_state" default="0" />
-
-  <node pkg="jude_percept" name="lane_change_monitor" type="lane_change_monitor">
-    <param name="lane_change_monitor_state" value="$(arg lane_change_monitor_state)" />
-  </node>
-</launch>
