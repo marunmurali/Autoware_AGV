@@ -2729,6 +2729,13 @@ params :
       cmd_param :
         dash        : ''
         delim       : ':='
+    - name  : serial_baud_rate
+      desc  : serial_baud_rate desc sample
+      label : Baud rate
+      v     : 115200
+      cmd_param :
+        dash        : ''
+        delim       : ':='
 
   - name  : localization_monitor
     vars :
@@ -2746,15 +2753,6 @@ params :
       cmd_param :
         dash        : ''
         delim       : ':='
-
-    - name  : serial_baud_rate
-      desc  : serial_baud_rate desc sample
-      label : Baud rate
-      v     : 115200
-      cmd_param :
-        dash        : ''
-        delim       : ':='
-
 
   - name  : grid_detector
     vars :
