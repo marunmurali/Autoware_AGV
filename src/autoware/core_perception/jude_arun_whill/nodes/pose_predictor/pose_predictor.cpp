@@ -7,7 +7,14 @@
 #include <iostream>
 #include <time.h>
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
+#include <tf2/LinearMath/Quaternion.h>
+#include <tf2_ros/transform_listener.h>
+#include <geometry_msgs/TransformStamped.h>
+#include "geometry_msgs/Vector3.h"
+#include "geometry_msgs/Quaternion.h"
+#include "tf/transform_datatypes.h"
 using namespace std;
+
   //Initialize the functions
   void callbackFromGnssOut(const geometry_msgs::PoseStamped &received_pose);
   void callbackFromGnssIn(const geometry_msgs::PoseStamped &received_pose);
@@ -20,8 +27,9 @@ using namespace std;
 
   //Initialize messages
   geometry_msgs::PoseStamped pose_in,pose_out,pose_ndt,pose_ndt_mod,poseout;
-  nav_msgs::Odometry odom_in,odom_last;
+  nav_msgs::Odometry odom_in;
   sensor_msgs::Imu Imu_raw;
+  //geometry_msgs::TransformStamped transformStamped;
 
   // handle
   //ros::NodeHandle nh_;
@@ -40,6 +48,10 @@ using namespace std;
   float ndt_score,gnss_precision;
   ros::Time score_time,precision_time,ndt_time,last_ndt_time(0);
   tf2::Quaternion quat_in,quat_last,quat_ndt,quat_delta,odom_quat;
+  //tf2_ros::Buffer tfBuffer;
+  double delta_time=.1;
+  double roll, pitch, yaw_mod,vx_odo,tw_odo;
+  
 
 void callbackFromGnssOut(const geometry_msgs::PoseStamped::ConstPtr &received_pose)
 {
@@ -70,7 +82,6 @@ precision_time=received_pose3->header.stamp;//please make sure this line does no
 }
 void callbackFromOdom(const nav_msgs::Odometry::ConstPtr &received_Odom)
 {
-odom_last=odom_in;
 odom_in=*received_Odom;
 }
 void callbackFromImu(const sensor_msgs::Imu::ConstPtr &received_Imu)
@@ -80,8 +91,8 @@ Imu_raw=*received_Imu;
 
 int main(int argc, char** argv)
 {
-ros::init(argc, argv, "combine_gps");
-ros::NodeHandle nh_;
+  ros::init(argc, argv, "pose_predictor");
+  ros::NodeHandle nh_;
   pub1_ = nh_.advertise<geometry_msgs::PoseStamped>("gnss_pose", 10);
 
   // setup subscriber
@@ -90,17 +101,15 @@ ros::NodeHandle nh_;
   sub3_ = nh_.subscribe("ndt_pose", 10, callbackFromNdtpose);
   sub4_ = nh_.subscribe("ndt_stat", 10, callbackFromNdtstat);
   sub5_ = nh_.subscribe("gnss_precision", 10, callbackFromGnssPrecision);
-  sub6_ = nh_.subscribe("odom", 10, callbackFromGnssPrecision);
-  sub7_ = nh_.subscribe("imu_raw", 10, callbackFromGnssPrecision);
+  sub6_ = nh_.subscribe("odom", 10, callbackFromOdom);
+  sub7_ = nh_.subscribe("imu_raw", 10, callbackFromImu);
+
   //choose which position to use and put into publisher
-  float ndt_score_limit = 500; // definition of input points
+  float ndt_score_limit = 0.4; // definition of input points
   nh_.getParam("ndt_score_limit", ndt_score_limit); // Get parameter from ros system
   ros::Rate loop_rate(10);
   while(ros::ok())
   {
-  //  ROS_INFO("before if \n in time  = %f \n gbs time = %f \n now time = %f \n", pose_in.header.stamp.toSec(), precision_time.toSec(), ros::Time::now().toSec());
-    //ROS_INFO("in time delta  = %f \n out time delta= %f \n", (ros::Time::now().toSec()-pose_in.header.stamp.toSec()), (ros::Time::now().toSec()-precision_time.toSec()));
-
   if((ros::Time::now().toSec()-pose_in.header.stamp.toSec())<2)
   {
       poseout=pose_in;
@@ -117,35 +126,35 @@ ros::NodeHandle nh_;
       //ROS_INFO("combined out output x is %f\n", poseout.pose.position.x);
       pub1_.publish(poseout);
   }
-  //else if(ndt_score > ndt_score_limit && (ros::Time::now().toSec()-score_time.toSec())<2)
   else
   {
   //extend pos ndt based on odom
-  if((ndt_time.toSec()-last_ndt_time.toSec())>2&&ndt_score > ndt_score_limit)
+  if(last_ndt_time.toSec()>ndt_time.toSec())
+  {
+  last_ndt_time=ndt_time-ros::Duration(2.1);
+  }
+  if((ndt_time.toSec()-last_ndt_time.toSec())>2&&ndt_score < ndt_score_limit)
   {
   pose_ndt_mod.pose.position.x=pose_ndt.pose.position.x;
-  pose_ndt_mod.pose.position.y=pose_ndt.pose.position.x;
-  pose_ndt_mod.pose.orientation=pose_ndt.pose.orientation;
+  pose_ndt_mod.pose.position.y=pose_ndt.pose.position.y;
+  pose_ndt_mod.pose.position.z=pose_ndt.pose.position.z;
+  tf2::convert(pose_ndt.pose.orientation,pose_ndt_mod.pose.orientation);
+  tf2::convert(pose_ndt_mod.pose.orientation,quat_ndt);
+  tf2::Matrix3x3(quat_ndt).getRPY(roll, pitch, yaw_mod);
   last_ndt_time=ndt_time;
   }
-  pose_ndt_mod.pose.position.x = pose_ndt.pose.position.x+(odom_last.pose.pose.position.x-odom_in.pose.pose.position.x);
-  pose_ndt_mod.pose.position.y = pose_ndt.pose.position.y+(odom_last.pose.pose.position.y-odom_in.pose.pose.position.y);
-  tf2::convert(odom_in.pose.pose.orientation,quat_in);
-  tf2::convert(odom_last.pose.pose.orientation,quat_last);
-  tf2::convert(pose_ndt_mod.pose.orientation,quat_ndt);
-  quat_last[3]=-quat_last[3];
-  quat_delta = quat_in*quat_last;
-  //quat_delta = quat_in*quat_last_inverse;
-  odom_quat = quat_delta*quat_ndt;
+  vx_odo= odom_in.twist.twist.linear.x;
+  tw_odo= odom_in.twist.twist.angular.z;
+  yaw_mod += (tw_odo * delta_time);
+  pose_ndt_mod.pose.position.x += vx_odo * cos(yaw_mod) * delta_time;
+  pose_ndt_mod.pose.position.y += vx_odo * sin(yaw_mod) * delta_time;
+  odom_quat.setRPY(roll, pitch, yaw_mod);
+  odom_quat.normalize();
   tf2::convert(odom_quat,pose_ndt_mod.pose.orientation);
   poseout=pose_ndt_mod;
   ROS_INFO("gnss received from ndt.");
   pub1_.publish(poseout);
   }
-/*  else
-  {
-  ROS_INFO("no good localization available");
-  }*/
   ros::spinOnce();
   loop_rate.sleep();
 }
