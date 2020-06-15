@@ -172,8 +172,8 @@
 <!--multiplexer -->
 
 	<node pkg="jude_arun_whill" type="cmd_vel_multiplexer" name="cmd_vel_multiplexer">
-		<remap from="~/cmd_vel_priority_high" to="/joy_cmd_vel" />
-		<remap from="~/cmd_vel_priority_mid" to="/obstacle_twist" />
+		<remap from="~/cmd_vel_priority_high" to="/obstacle_twist" />
+		<remap from="~/cmd_vel_priority_mid" to="/joy_cmd_vel" />
 		<remap from="~/cmd_vel_priority_low" to="/autoware_twist" />
 		<remap from="~/cmd_vel_out" to="/cmd_vel" />
 		<param name="hold_sec" value="0.5" />

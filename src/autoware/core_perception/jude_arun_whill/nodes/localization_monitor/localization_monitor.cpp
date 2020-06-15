@@ -48,7 +48,7 @@ int main(int argc, char** argv)
   private_nh.getParam("stop_time", stop_time);
 
   // publishers and subscribers
-  pub1 = nh.advertise<geometry_msgs::Twist>("localization_monitor_twist", 10);
+  pub1 = nh.advertise<geometry_msgs::Twist>("obstacle_twist", 10);
   sub1 = nh.subscribe("ndt_stat", 10, callbackFromNdtstat);
 
   // Looping non-callback function calculations
