@@ -1,0 +1,9 @@
+<launch>
+  <arg name="ndt_score_to_stop" default="0.8" />
+  <arg name="stop_time" default="0.2" />
+
+  <node pkg="jude_arun_whill" name="localization_monitor" type="localization_monitor">
+    <param name="ndt_score_to_stop" value="$(arg ndt_score_to_stop)" />
+    <param name="stop_time" value="$(arg stop_time)" />
+  </node>
+</launch>
