@@ -119,6 +119,10 @@ target_link_libraries(pose_predictor ${catkin_LIBRARIES})
 # add_dependencies(dwm1001 ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 # target_link_libraries(dwm1001 ${catkin_LIBRARIES})
 
+## localization monitor
+add_executable(localization_monitor nodes/localization_monitor/localization_monitor.cpp)
+add_dependencies(localization_monitor ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(localization_monitor ${catkin_LIBRARIES})
 
 
 install(TARGETS 
@@ -129,6 +133,7 @@ install(TARGETS
 	    combine_gps
 	    pose_predictor
 	    # dwm1001
+            localization_monitor
         ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
         LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
         RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}

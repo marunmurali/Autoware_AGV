@@ -755,6 +755,10 @@ cmds:
       desc : Indoor GPS Driver
       cmd  : roslaunch jude_arun_whill dwm1001.launch node_name:=dwm1001
       param: dwm1001
+    - name : localization_monitor
+      desc : Detects when localization looses and stops robot
+      cmd  : roslaunch jude_arun_whill localization_monitor.launch node_name:=localization_monitor
+      param: localization_monitor
 
 
 
@@ -2725,7 +2729,6 @@ params :
       cmd_param :
         dash        : ''
         delim       : ':='
-
     - name  : serial_baud_rate
       desc  : serial_baud_rate desc sample
       label : Baud rate
@@ -2734,6 +2737,22 @@ params :
         dash        : ''
         delim       : ':='
 
+  - name  : localization_monitor
+    vars :
+    - name  : ndt_score_to_stop
+      desc  : ndt_score_to_stop desc sample
+      label : ndt score to stop 
+      v     : 0.8
+      cmd_param :
+        dash        : ''
+        delim       : ':='
+    - name  : stop_time
+      desc  : stop_time desc sample
+      label : Wait time
+      v     : 0.2
+      cmd_param :
+        dash        : ''
+        delim       : ':='
 
   - name  : grid_detector
     vars :
