@@ -1,0 +1,9 @@
+copy jude=arun=wil
+edit  sensing.yaml
+copy precision.msg to autoware msg and it's cmake list
+
+    ConfigLaneChangeProcessor.msg
+    ConfigLaneChangeMonitor.msg
+    ConfigRealTimeObstacleSize.msg
+    ConfigRealTimeLaneChangeProcessor.msg
+toautoware config messages  too
